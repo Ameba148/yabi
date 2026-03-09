@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Мой магазин</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">My<span>Shop</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="product.html">Товар</a></li>
+            <li><a href="cart.html">Корзина</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+        </ul>
+    </header>
+
+    <div class="container">
+        <h1>Ваша корзина</h1>
+        <div class="cart-items">
+            <!-- Один товар в корзине (для демонстрации) -->
+            <div class="cart-item">
+                <img src="images/tshirt.jpg" alt="Футболка">
+                <div>
+                    <h3>Классическая футболка</h3>
+                    <p>Размер: M, Цвет: белый</p>
+                </div>
+                <p class="price">1 500 ₽</p>
+                <button class="btn" onclick="alert('Товар удалён (демо)')">Удалить</button>
+            </div>
+            <div class="cart-item">
+                <img src="images/jeans.jpg" alt="Джинсы">
+                <div>
+                    <h3>Удобные джинсы</h3>
+                    <p>Размер: 30, Цвет: синий</p>
+                </div>
+                <p class="price">3 200 ₽</p>
+                <button class="btn" onclick="alert('Товар удалён (демо)')">Удалить</button>
+            </div>
+            <div class="cart-total">
+                <strong>Итого: 4 700 ₽</strong>
+            </div>
+            <button class="btn" onclick="alert('Оформление заказа (демо)')" style="margin-top: 1rem;">Оформить заказ</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 MyShop. Все права защищены.</p>
+    </footer>
+</body>
+</html>
