@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yabi – móda a elektronika</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">YABI</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active"><span data-i18n="nav_home">Hlavní</span></a></li>
+            <li><a href="cart.html"><span data-i18n="nav_cart">Košík</span> <span class="cart-count">0</span></a></li>
+            <li><a href="profile.html"><span data-i18n="nav_profile">Profil</span></a></li>
+            <li><a href="contact.html"><span data-i18n="nav_contact">Kontakt</span></a></li>
+        </ul>
+        <div class="header-right">
+            <!-- переключатель языков будет вставлен сюда скриптом -->
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="catalog-layout">
+            <!-- Фильтры (сайдбар) -->
+            <aside class="filters">
+                <h3 data-i18n="filters">Filtry</h3>
+                <input type="text" id="search-input" class="search-box" placeholder="🔍 Hledat..." data-i18n-placeholder="search">
+
+                <div class="filter-section">
+                    <h4 data-i18n="categories">Kategorie</h4>
+                    <div class="filter-options" id="category-filters"></div>
+                </div>
+
+                <div class="filter-section">
+                    <h4 data-i18n="price_range">Cena</h4>
+                    <div class="filter-options">
+                        <label><input type="radio" name="price" value="all" checked> <span data-i18n="all_prices">Všechny</span></label>
+                        <label><input type="radio" name="price" value="0-500"> 0 – 500 Kč</label>
+                        <label><input type="radio" name="price" value="500-1000"> 500 – 1000 Kč</label>
+                        <label><input type="radio" name="price" value="1000-2000"> 1000 – 2000 Kč</label>
+                        <label><input type="radio" name="price" value="2000+"> 2000+ Kč</label>
+                    </div>
+                </div>
+
+                <button id="reset-filters" class="btn btn-outline" data-i18n="reset_filters">Resetovat filtry</button>
+            </aside>
+
+            <!-- Сетка товаров -->
+            <section class="product-section">
+                <h1 data-i18n="new_arrivals">Doporučené</h1>
+                <div class="product-grid" id="product-grid">
+                    <!-- товары грузятся динамически -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 YABI. <span data-i18n="footer_rights">Všechna práva vyhrazena.</span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        let allProducts = [];
+        let categories = [];
+
+        // Загрузка данных из products.json
+        fetch('products.json')
+            .then(res => res.json())
+            .then(data => {
+                categories = data.categories;
+                allProducts = data.products;
+                renderCategories();
+                renderProducts(allProducts);
+            });
+
+        function renderCategories() {
+            const container = document.getElementById('category-filters');
+            categories.forEach(cat => {
+                const label = document.createElement('label');
+                label.innerHTML = `<input type="checkbox" class="category-filter" value="${cat.id}"> ${cat[`name_${currentLanguage}`]}`;
+                container.appendChild(label);
+            });
+            document.querySelectorAll('.category-filter').forEach(cb => cb.addEventListener('change', filterProducts));
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('product-grid');
+            if (products.length === 0) {
+                grid.innerHTML = `<p data-i18n="no_products">Žádné produkty nenalezeny.</p>`;
+                return;
+            }
+            let html = '';
+            products.forEach(p => {
+                const name = p[`name_${currentLanguage}`] || p.name_cs;
+                const priceFormatted = formatPrice(p.price_czk);
+                html += `
+                    <div class="product-card" data-id="${p.id}">
+                        <a href="product.html?id=${p.id}" class="product-link">
+                            <img src="${p.image}" alt="${name}" loading="lazy">
+                            <div class="product-info">
+                                <h3>${name}</h3>
+                                <p class="price">${priceFormatted}</p>
+                            </div>
+                        </a>
+                        <button class="btn-add-cart" data-id="${p.id}" title="Přidat do košíku">
+                            <i class="fas fa-shopping-bag"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+
+            // Обработчики кнопок "добавить в корзину"
+            document.querySelectorAll('.btn-add-cart').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productId = btn.dataset.id;
+                    const product = allProducts.find(p => p.id === productId);
+                    if (product) {
+                        addToCart({
+                            id: product.id,
+                            name: product[`name_${currentLanguage}`] || product.name_cs,
+                            price: product.price_czk,
+                            image: product.image,
+                            quantity: 1
+                        });
+                    }
+                });
+            });
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const selectedCats = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+            const priceRange = document.querySelector('input[name="price"]:checked')?.value || 'all';
+
+            let filtered = allProducts;
+
+            if (searchTerm) {
+                filtered = filtered.filter(p => {
+                    const name = p[`name_${currentLanguage}`] || p.name_cs;
+                    return name.toLowerCase().includes(searchTerm);
+                });
+            }
+
+            if (selectedCats.length) {
+                filtered = filtered.filter(p => selectedCats.includes(p.category));
+            }
+
+            if (priceRange !== 'all') {
+                if (priceRange.endsWith('+')) {
+                    const min = parseInt(priceRange);
+                    filtered = filtered.filter(p => p.price_czk >= min);
+                } else {
+                    const [min, max] = priceRange.split('-').map(Number);
+                    filtered = filtered.filter(p => p.price_czk >= min && p.price_czk <= max);
+                }
+            }
+
+            renderProducts(filtered);
+        }
+
+        document.getElementById('search-input').addEventListener('input', filterProducts);
+        document.querySelectorAll('input[name="price"]').forEach(r => r.addEventListener('change', filterProducts));
+        document.getElementById('reset-filters').addEventListener('click', () => {
+            document.getElementById('search-input').value = '';
+            document.querySelectorAll('.category-filter').forEach(cb => cb.checked = false);
+            document.querySelector('input[name="price"][value="all"]').checked = true;
+            filterProducts();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yabi – Produkt</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">YABI</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span data-i18n="nav_home">Hlavní</span></a></li>
+            <li><a href="cart.html"><span data-i18n="nav_cart">Košík</span> <span class="cart-count">0</span></a></li>
+            <li><a href="profile.html"><span data-i18n="nav_profile">Profil</span></a></li>
+            <li><a href="contact.html"><span data-i18n="nav_contact">Kontakt</span></a></li>
+        </ul>
+        <div class="header-right"></div>
+    </header>
+
+    <main class="container">
+        <div id="product-detail-container" class="product-detail-page"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 YABI. <span data-i18n="footer_rights">Všechna práva vyhrazena.</span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        let allProducts = [];
+
+        fetch('products.json')
+            .then(res => res.json())
+            .then(data => {
+                allProducts = data.products;
+                const urlParams = new URLSearchParams(window.location.search);
+                const productId = urlParams.get('id');
+                if (productId) {
+                    const product = allProducts.find(p => p.id === productId);
+                    if (product) renderProduct(product);
+                    else window.location.href = 'index.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            });
+
+        function renderProduct(product) {
+            const container = document.getElementById('product-detail-container');
+            const name = product[`name_${currentLanguage}`] || product.name_cs;
+            const desc = product[`description_${currentLanguage}`] || product.description_cs;
+            container.innerHTML = `
+                <div class="product-detail">
+                    <div class="product-gallery">
+                        <img src="${product.image}" alt="${name}">
+                    </div>
+                    <div class="product-info-detail">
+                        <h1>${name}</h1>
+                        <p class="detail-price" data-price-czk="${product.price_czk}">${formatPrice(product.price_czk)}</p>
+                        <p class="detail-description">${desc}</p>
+                        <button class="btn btn-large" id="add-to-cart-detail">
+                            <i class="fas fa-shopping-bag"></i> <span data-i18n="add_to_cart">Přidat do košíku</span>
+                        </button>
+                        <a href="index.html" class="btn btn-outline" data-i18n="back_to_shop">Zpět do obchodu</a>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('add-to-cart-detail').addEventListener('click', () => {
+                addToCart({
+                    id: product.id,
+                    name: name,
+                    price: product.price_czk,
+                    image: product.image,
+                    quantity: 1
+                });
+            });
+        }
+    </script>
+</body>
+</html>

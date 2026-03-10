@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yabi – Objednávka</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">YABI</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span data-i18n="nav_home">Hlavní</span></a></li>
+            <li><a href="cart.html"><span data-i18n="nav_cart">Košík</span> <span class="cart-count">0</span></a></li>
+            <li><a href="profile.html"><span data-i18n="nav_profile">Profil</span></a></li>
+            <li><a href="contact.html"><span data-i18n="nav_contact">Kontakt</span></a></li>
+        </ul>
+        <div class="header-right"></div>
+    </header>
+
+    <main class="container">
+        <h1 data-i18n="checkout_title">Dokončení objednávky</h1>
+
+        <!-- Индикатор шагов -->
+        <div class="checkout-steps">
+            <div class="step" data-step="1" data-i18n="step_cart">Košík</div>
+            <div class="step" data-step="2" data-i18n="step_contact">Kontakt</div>
+            <div class="step" data-step="3" data-i18n="step_delivery">Doprava a platba</div>
+            <div class="step" data-step="4" data-i18n="step_summary">Shrnutí</div>
+        </div>
+
+        <!-- Шаг 1: Cart summary (read-only) -->
+        <div class="checkout-step-content" id="step1">
+            <div id="checkout-items-summary"></div>
+            <div class="cart-total" id="checkout-total"></div>
+            <div class="step-actions">
+                <button class="btn" onclick="nextStep(2)" data-i18n="continue">Pokračovat</button>
+            </div>
+        </div>
+
+        <!-- Шаг 2: Kontaktní údaje -->
+        <div class="checkout-step-content" id="step2" style="display:none;">
+            <h3 data-i18n="contact_info">Kontaktní údaje</h3>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label data-i18n="name">Jméno a příjmení *</label>
+                    <input type="text" name="name" id="checkout-name" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="email">Email *</label>
+                    <input type="email" name="email" id="checkout-email" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="phone">Telefon</label>
+                    <input type="tel" name="phone" id="checkout-phone">
+                </div>
+                <div class="step-actions">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep(1)"><span data-i18n="back">Zpět</span></button>
+                    <button type="submit" class="btn"><span data-i18n="continue">Pokračovat</span></button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Шаг 3: Doprava a platba -->
+        <div class="checkout-step-content" id="step3" style="display:none;">
+            <h3 data-i18n="shipping_method">Způsob dopravy</h3>
+            <div class="form-group">
+                <select id="shipping-method" class="form-control">
+                    <option value="personal" data-i18n="shipping_options.personal">Osobní předání (Praha, zdarma)</option>
+                    <option value="zasilkovna" data-i18n="shipping_options.zasilkovna">Zásilkovna (79 Kč)</option>
+                    <option value="posta" data-i18n="shipping_options.posta">Česká pošta (89 Kč)</option>
+                </select>
+            </div>
+
+            <h3 data-i18n="payment_method">Způsob platby</h3>
+            <div class="form-group">
+                <select id="payment-method" class="form-control">
+                    <option value="qr" data-i18n="payment_options.qr">QR kód (KB)</option>
+                    <option value="paypal" data-i18n="payment_options.paypal">PayPal</option>
+                    <option value="cash" data-i18n="payment_options.cash">Hotově při předání</option>
+                </select>
+            </div>
+
+            <!-- Блок с картой и информацией о доставке -->
+            <div class="delivery-info">
+                <h4 data-i18n="delivery_info">Informace o doručení</h4>
+                <p data-i18n="delivery_prague">Doručujeme pouze v rámci Prahy. Doručení obvykle do 5 pracovních dnů.</p>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d163930.5276467385!2d14.293138235208477!3d50.05982769838437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b939c0970798b%3A0x400af0f66164090!2sPrague!5e0!3m2!1sen!2scz!4v1700000000000!5m2!1sen!2scz" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- Инструкция для QR-оплаты (появляется при выборе) -->
+            <div id="qr-payment-info" class="qr-info" style="display:none;">
+                <p><strong data-i18n="qr_instruction">Při platbě QR kódem použijte číslo objednávky do zprávy pro příjemce.</strong></p>
+                <img src="images/qr-platba.png" alt="QR platba" style="max-width:200px;">
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="btn btn-secondary" onclick="prevStep(2)"><span data-i18n="back">Zpět</span></button>
+                <button type="button" class="btn" onclick="nextStep(4)"><span data-i18n="continue">Pokračovat</span></button>
+            </div>
+        </div>
+
+        <!-- Шаг 4: Shrnutí a odeslání -->
+        <div class="checkout-step-content" id="step4" style="display:none;">
+            <h3 data-i18n="order_summary">Shrnutí objednávky</h3>
+            <div id="summary-items"></div>
+            <div class="order-number-box">
+                <p><strong data-i18n="your_order_number">Vaše číslo objednávky:</strong> <span id="order-number-display" class="order-number"></span></p>
+                <p data-i18n="order_number_instruction">Při platbě QR kódem nezapomeňte toto číslo uvést do zprávy pro příjemce.</p>
+            </div>
+
+            <form id="final-order-form" action="https://formspree.io/f/mbdzdqya" method="POST">
+                <input type="hidden" name="order_number" id="order-number-input">
+                <input type="hidden" name="customer_name" id="summary-name">
+                <input type="hidden" name="customer_email" id="summary-email">
+                <input type="hidden" name="customer_phone" id="summary-phone">
+                <input type="hidden" name="shipping_method" id="summary-shipping">
+                <input type="hidden" name="payment_method" id="summary-payment">
+                <input type="hidden" name="cart_data" id="summary-cart">
+                <input type="hidden" name="total_amount" id="summary-total">
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep(3)"><span data-i18n="back">Zpět</span></button>
+                    <button type="submit" class="btn btn-primary" data-i18n="submit_order">Odeslat objednávku</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 YABI. <span data-i18n="footer_rights">Všechna práva vyhrazena.</span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        let currentStep = 1;
+        let orderNumber = '';
+        let cart = [];
+        let contactData = {};
+        let shippingData = {};
+
+        function generateOrderNumber() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return `YABI-${year}${month}${day}-${random}`;
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.checkout-step-content').forEach(el => el.style.display = 'none');
+            document.getElementById(`step${step}`).style.display = 'block';
+            document.querySelectorAll('.step').forEach(el => {
+                el.classList.remove('active');
+                if (parseInt(el.dataset.step) === step) el.classList.add('active');
+            });
+            currentStep = step;
+        }
+
+        window.nextStep = function(step) {
+            if (step === 2) {
+                const saved = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                document.getElementById('checkout-name').value = saved.name || '';
+                document.getElementById('checkout-email').value = saved.email || '';
+                document.getElementById('checkout-phone').value = saved.phone || '';
+            }
+            if (step === 3) {
+                contactData = {
+                    name: document.getElementById('checkout-name').value,
+                    email: document.getElementById('checkout-email').value,
+                    phone: document.getElementById('checkout-phone').value
+                };
+            }
+            if (step === 4) {
+                shippingData = {
+                    method: document.getElementById('shipping-method').value,
+                    payment: document.getElementById('payment-method').value
+                };
+                showSummary();
+            }
+            showStep(step);
+        };
+
+        window.prevStep = function(step) {
+            showStep(step);
+        };
+
+        function showSummary() {
+            cart = getCart();
+            orderNumber = generateOrderNumber();
+            document.getElementById('order-number-display').textContent = orderNumber;
+            document.getElementById('order-number-input').value = orderNumber;
+
+            let total = 0;
+            let itemsHtml = '<ul class="summary-list">';
+            cart.forEach(item => {
+                itemsHtml += `<li>${item.name} – ${item.quantity} ks × ${formatPrice(item.price)} = ${formatPrice(item.price * item.quantity)}</li>`;
+                total += item.price * item.quantity;
+            });
+
+            let shippingCost = 0;
+            if (shippingData.method === 'zasilkovna') shippingCost = 79;
+            if (shippingData.method === 'posta') shippingCost = 89;
+            total += shippingCost;
+            itemsHtml += `<li class="summary-shipping"><strong>Doprava:</strong> ${shippingCost} Kč</li>`;
+            itemsHtml += `<li class="summary-total"><strong>${t('total', {total: total})}</strong></li>`;
+            itemsHtml += '</ul>';
+
+            document.getElementById('summary-items').innerHTML = itemsHtml;
+
+            document.getElementById('summary-name').value = contactData.name;
+            document.getElementById('summary-email').value = contactData.email;
+            document.getElementById('summary-phone').value = contactData.phone || '';
+            document.getElementById('summary-shipping').value = shippingData.method;
+            document.getElementById('summary-payment').value = shippingData.payment;
+            document.getElementById('summary-cart').value = JSON.stringify(cart);
+            document.getElementById('summary-total').value = total;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cart = getCart();
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            // Шаг 1: отображение товаров
+            let itemsHtml = '<ul>';
+            let total = 0;
+            cart.forEach(item => {
+                itemsHtml += `<li>${item.name} – ${item.quantity} ks × ${formatPrice(item.price)} = ${formatPrice(item.price * item.quantity)}</li>`;
+                total += item.price * item.quantity;
+            });
+            itemsHtml += '</ul>';
+            document.getElementById('checkout-items-summary').innerHTML = itemsHtml;
+            document.getElementById('checkout-total').innerHTML = `<strong>${t('total', {total: total})}</strong>`;
+
+            // Обработчик для выбора способа оплаты (показ QR)
+            document.getElementById('payment-method').addEventListener('change', function() {
+                document.getElementById('qr-payment-info').style.display = this.value === 'qr' ? 'block' : 'none';
+            });
+
+            // Обработчик формы контактов
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                nextStep(3);
+            });
+
+            showStep(1);
+        });
+    </script>
+</body>
+</html>

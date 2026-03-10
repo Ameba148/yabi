@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yabi – Můj profil</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">YABI</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span data-i18n="nav_home">Hlavní</span></a></li>
+            <li><a href="cart.html"><span data-i18n="nav_cart">Košík</span> <span class="cart-count">0</span></a></li>
+            <li><a href="profile.html" class="active"><span data-i18n="nav_profile">Profil</span></a></li>
+            <li><a href="contact.html"><span data-i18n="nav_contact">Kontakt</span></a></li>
+        </ul>
+        <div class="header-right"></div>
+    </header>
+
+    <main class="container">
+        <h1 data-i18n="profile_title">Můj profil</h1>
+
+        <div class="profile-tabs">
+            <button class="tab-btn active" data-tab="personal" data-i18n="profile_personal">Osobní údaje</button>
+            <button class="tab-btn" data-tab="settings" data-i18n="profile_settings">Nastavení</button>
+            <button class="tab-btn" data-tab="orders" data-i18n="profile_orders">Moje objednávky</button>
+        </div>
+
+        <!-- Личные данные -->
+        <div class="tab-content active" id="tab-personal">
+            <form class="profile-form" id="profile-form">
+                <div class="form-group">
+                    <label data-i18n="name">Jméno a příjmení</label>
+                    <input type="text" name="fullname" id="profile-name">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="email">Email</label>
+                    <input type="email" name="email" id="profile-email">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="phone">Telefon</label>
+                    <input type="tel" name="phone" id="profile-phone">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="address">Adresa</label>
+                    <input type="text" name="address" id="profile-address">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="city">Město</label>
+                    <input type="text" name="city" id="profile-city" value="Praha">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="zip">PSČ</label>
+                    <input type="text" name="zip" id="profile-zip">
+                </div>
+                <button type="submit" class="btn" data-i18n="save_profile">Uložit profil</button>
+            </form>
+        </div>
+
+        <!-- Настройки -->
+        <div class="tab-content" id="tab-settings">
+            <div class="settings-panel">
+                <div class="setting-item">
+                    <span data-i18n="setting_language">Jazyk</span>
+                    <select id="settings-language">
+                        <option value="cs">Čeština</option>
+                        <option value="ru">Русский</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span data-i18n="setting_currency">Měna</span>
+                    <select id="settings-currency">
+                        <option value="CZK">CZK</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span data-i18n="setting_theme">Tmavý režim</span>
+                    <label class="switch">
+                        <input type="checkbox" id="settings-theme">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- История заказов (заглушка) -->
+        <div class="tab-content" id="tab-orders">
+            <p data-i18n="no_orders">Zatím nemáte žádné objednávky.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 YABI. <span data-i18n="footer_rights">Všechna práva vyhrazena.</span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загрузка профиля
+            const saved = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            document.getElementById('profile-name').value = saved.name || '';
+            document.getElementById('profile-email').value = saved.email || '';
+            document.getElementById('profile-phone').value = saved.phone || '';
+            document.getElementById('profile-address').value = saved.address || '';
+            document.getElementById('profile-city').value = saved.city || 'Praha';
+            document.getElementById('profile-zip').value = saved.zip || '';
+
+            // Сохранение профиля
+            document.getElementById('profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const profile = {
+                    name: document.getElementById('profile-name').value,
+                    email: document.getElementById('profile-email').value,
+                    phone: document.getElementById('profile-phone').value,
+                    address: document.getElementById('profile-address').value,
+                    city: document.getElementById('profile-city').value,
+                    zip: document.getElementById('profile-zip').value
+                };
+                localStorage.setItem('userProfile', JSON.stringify(profile));
+                alert(t('profile_saved'));
+            });
+
+            // Настройки: язык
+            const langSelect = document.getElementById('settings-language');
+            langSelect.value = localStorage.getItem('language') || 'cs';
+            langSelect.addEventListener('change', () => {
+                localStorage.setItem('language', langSelect.value);
+                location.reload();
+            });
+
+            // Валюта
+            const currencySelect = document.getElementById('settings-currency');
+            currencySelect.value = localStorage.getItem('currency') || 'CZK';
+            currencySelect.addEventListener('change', () => {
+                localStorage.setItem('currency', currencySelect.value);
+                location.reload();
+            });
+
+            // Тёмная тема
+            const themeToggle = document.getElementById('settings-theme');
+            themeToggle.checked = localStorage.getItem('theme') === 'dark';
+            themeToggle.addEventListener('change', () => {
+                localStorage.setItem('theme', themeToggle.checked ? 'dark' : 'light');
+                location.reload();
+            });
+
+            // Переключение вкладок
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+{
+  "categories": [
+    {
+      "id": "clothing",
+      "name_cs": "Oblečení",
+      "name_ru": "Одежда",
+      "name_en": "Clothing",
+      "icon": "images/categories/clothing.svg",
+      "subcategories": [
+        { "id": "tshirts", "name_cs": "Trička", "name_ru": "Футболки", "name_en": "T-shirts" },
+        { "id": "jeans", "name_cs": "Džíny", "name_ru": "Джинсы", "name_en": "Jeans" },
+        { "id": "jackets", "name_cs": "Bundy", "name_ru": "Куртки", "name_en": "Jackets" },
+        { "id": "sneakers", "name_cs": "Tenisky", "name_ru": "Кроссовки", "name_en": "Sneakers" }
+      ]
+    },
+    {
+      "id": "electronics",
+      "name_cs": "Elektronika",
+      "name_ru": "Электроника",
+      "name_en": "Electronics",
+      "icon": "images/categories/electronics.svg",
+      "subcategories": [
+        { "id": "smartphones", "name_cs": "Mobily", "name_ru": "Смартфоны", "name_en": "Smartphones" },
+        { "id": "laptops", "name_cs": "Notebooky", "name_ru": "Ноутбуки", "name_en": "Laptops" },
+        { "id": "headphones", "name_cs": "Sluchátka", "name_ru": "Наушники", "name_en": "Headphones" }
+      ]
+    },
+    {
+      "id": "sports",
+      "name_cs": "Sport",
+      "name_ru": "Спорт",
+      "name_en": "Sports",
+      "icon": "images/categories/sports.svg",
+      "subcategories": [
+        { "id": "fitness", "name_cs": "Fitness", "name_ru": "Фитнес", "name_en": "Fitness" },
+        { "id": "cycling", "name_cs": "Cyklistika", "name_ru": "Велоспорт", "name_en": "Cycling" },
+        { "id": "wintersports", "name_cs": "Zimní sporty", "name_ru": "Зимние виды", "name_en": "Winter sports" }
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": "tshirt1",
+      "name_cs": "Klasické bílé tričko",
+      "name_ru": "Классическая белая футболка",
+      "name_en": "Classic white t-shirt",
+      "category": "clothing",
+      "subcategory": "tshirts",
+      "price_czk": 499,
+      "image": "images/products/tshirt-white.jpg",
+      "description_cs": "Pohodlné bavlněné tričko pro každodenní nošení.",
+      "description_ru": "Удобная хлопковая футболка для повседневной носки.",
+      "description_en": "Comfortable cotton t-shirt for everyday wear."
+    },
+    {
+      "id": "jeans1",
+      "name_cs": "Modré džíny",
+      "name_ru": "Синие джинсы",
+      "name_en": "Blue jeans",
+      "category": "clothing",
+      "subcategory": "jeans",
+      "price_czk": 1299,
+      "image": "images/products/jeans-blue.jpg",
+      "description_cs": "Klasické džíny z kvalitního denimu.",
+      "description_ru": "Классические джинсы из качественного денима.",
+      "description_en": "Classic jeans made of quality denim."
+    },
+    {
+      "id": "jacket1",
+      "name_cs": "Stylová bunda",
+      "name_ru": "Стильная куртка",
+      "name_en": "Stylish jacket",
+      "category": "clothing",
+      "subcategory": "jackets",
+      "price_czk": 1899,
+      "image": "images/products/jacket.jpg",
+      "description_cs": "Lehká bunda do města i do přírody.",
+      "description_ru": "Легкая куртка для города и природы.",
+      "description_en": "Light jacket for city and nature."
+    },
+    {
+      "id": "sneakers1",
+      "name_cs": "Bílé tenisky",
+      "name_ru": "Белые кроссовки",
+      "name_en": "White sneakers",
+      "category": "clothing",
+      "subcategory": "sneakers",
+      "price_czk": 1599,
+      "image": "images/products/sneakers.jpg",
+      "description_cs": "Pohodlné tenisky na každý den.",
+      "description_ru": "Удобные кроссовки на каждый день.",
+      "description_en": "Comfortable sneakers for everyday wear."
+    },
+    {
+      "id": "smartphone1",
+      "name_cs": "Xiaomi Redmi Note 12",
+      "name_ru": "Xiaomi Redmi Note 12",
+      "name_en": "Xiaomi Redmi Note 12",
+      "category": "electronics",
+      "subcategory": "smartphones",
+      "price_czk": 5490,
+      "image": "images/products/xiaomi.jpg",
+      "description_cs": "Výkonný smartphone s velkým displejem.",
+      "description_ru": "Мощный смартфон с большим экраном.",
+      "description_en": "Powerful smartphone with large display."
+    },
+    {
+      "id": "laptop1",
+      "name_cs": "Lenovo ThinkPad",
+      "name_ru": "Lenovo ThinkPad",
+      "name_en": "Lenovo ThinkPad",
+      "category": "electronics",
+      "subcategory": "laptops",
+      "price_czk": 15990,
+      "image": "images/products/laptop.jpg",
+      "description_cs": "Spolehlivý notebook pro práci i studium.",
+      "description_ru": "Надежный ноутбук для работы и учебы.",
+      "description_en": "Reliable laptop for work and study."
+    },
+    {
+      "id": "headphones1",
+      "name_cs": "Bezdrátová sluchátka",
+      "name_ru": "Беспроводные наушники",
+      "name_en": "Wireless headphones",
+      "category": "electronics",
+      "subcategory": "headphones",
+      "price_czk": 1290,
+      "image": "images/products/headphones.jpg",
+      "description_cs": "Kvalitní zvuk a dlouhá výdrž baterie.",
+      "description_ru": "Качественный звук и долгое время работы.",
+      "description_en": "High quality sound and long battery life."
+    },
+    {
+      "id": "fitness1",
+      "name_cs": "Jógamatka",
+      "name_ru": "Коврик для йоги",
+      "name_en": "Yoga mat",
+      "category": "sports",
+      "subcategory": "fitness",
+      "price_czk": 399,
+      "image": "images/products/yogamat.jpg",
+      "description_cs": "Protiskluzová jógamatka z ekologického materiálu.",
+      "description_ru": "Противоскользящий коврик для йоги из экологичного материала.",
+      "description_en": "Non-slip yoga mat made of eco-friendly material."
+    },
+    {
+      "id": "bike1",
+      "name_cs": "Cyklistická helma",
+      "name_ru": "Велосипедный шлем",
+      "name_en": "Bike helmet",
+      "category": "sports",
+      "subcategory": "cycling",
+      "price_czk": 890,
+      "image": "images/products/helmet.jpg",
+      "description_cs": "Lehká a bezpečná helma na kolo.",
+      "description_ru": "Легкий и безопасный велосипедный шлем.",
+      "description_en": "Lightweight and safe bike helmet."
+    },
+    {
+      "id": "skis1",
+      "name_cs": "Lyžařské brýle",
+      "name_ru": "Горнолыжные очки",
+      "name_en": "Ski goggles",
+      "category": "sports",
+      "subcategory": "wintersports",
+      "price_czk": 690,
+      "image": "images/products/goggles.jpg",
+      "description_cs": "Zamlžování a UV filtr pro pohodlnou jízdu.",
+      "description_ru": "Защита от запотевания и УФ-фильтр для комфортного катания.",
+      "description_en": "Anti-fog and UV filter for comfortable riding."
+    }
+  ]
+}
